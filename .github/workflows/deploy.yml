@@ -3,10 +3,6 @@ name: 部署博客到 GitHub Pages
 on:
   push:
     branches: [ main ]
-    paths: 
-      - 'docs/**'
-      - 'scripts/**'
-      - 'templates/**'
   workflow_dispatch:
 
 permissions:
@@ -19,75 +15,59 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # 生成靜態站點
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
     steps:
-      - name: Checkout
+      - name: 📥 檢出代碼
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: 📦 設置 Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: 'admin/package-lock.json'
-
-      - name: Install dependencies
-        run: |
-          cd admin
-          npm ci
-
-      - name: Generate static site
-        run: |
-          cd admin
-          npm run generate-static
-        env:
-          SUPABASE_URL: https://bvdgbnlzfyygosqtknaw.supabase.co
-          SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2ZGdibmx6Znl5Z29zcXRrbmF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0NzM3OTQsImV4cCI6MjA3MDA0OTc5NH0.OYPJoXN9LNQuIfyWyDXs0V2BvdbS7Rkw-mXcVskrv4g
-
-      - name: Optimize images
-        run: |
-          # 安裝圖片優化工具
-          npm install -g imagemin-cli imagemin-webp imagemin-mozjpeg imagemin-pngquant
+          # 不使用緩存，避免路徑問題
           
-          # 優化圖片
-          find docs/assets/images -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" | xargs -I {} sh -c 'imagemin {} --out-dir=$(dirname {}) --plugin=mozjpeg --plugin=pngquant'
-          find docs/assets/images -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" | xargs -I {} sh -c 'imagemin {} --out-dir=$(dirname {}) --plugin=webp'
+      - name: 📋 安裝根目錄依賴
+        run: npm install
+        
+      - name: 📋 安裝 admin 依賴
+        run: |
+          cd admin
+          npm install
+
+      - name: 🚀 生成靜態博客
+        run: npm run generate:static
         continue-on-error: true
 
-      - name: Setup Pages
+      - name: 🔍 檢查生成的文件
+        run: |
+          echo "檢查 docs 目錄內容:"
+          ls -la docs/
+          echo "檢查主頁文件:"
+          if [ -f "docs/index.html" ]; then
+            echo "✅ index.html 存在"
+            head -20 docs/index.html
+          else
+            echo "❌ index.html 不存在"
+          fi
+
+      - name: 📄 配置 GitHub Pages
         uses: actions/configure-pages@v4
 
-      - name: Upload artifact
+      - name: 📤 上傳頁面文件
         uses: actions/upload-pages-artifact@v3
         with:
           path: './docs'
 
-  # 部署到 GitHub Pages
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
+      - name: 🚀 部署到 GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
-  # 發送通知（可選）
-  notify:
-    runs-on: ubuntu-latest
-    needs: [build, deploy]
-    if: always()
-    steps:
-      - name: Notify deployment status
+      - name: 🎉 部署完成通知
         run: |
-          if [ "${{ needs.deploy.result }}" == "success" ]; then
-            echo "✅ 博客部署成功！"
-            echo "🌐 訪問地址: https://xiaonaofua.github.io/blog2/"
-          else
-            echo "❌ 博客部署失敗！"
-            echo "請檢查部署日誌。"
-          fi
+          echo "✅ 博客部署成功！"
+          echo "🌐 訪問地址: ${{ steps.deployment.outputs.page_url }}"

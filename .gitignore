@@ -1,0 +1,123 @@
+# 依賴文件
+node_modules/
+*/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 構建輸出
+dist/
+build/
+*/dist/
+*/build/
+
+# 環境變量
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*/.env
+*/.env.local
+
+# 編輯器配置
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系統文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 日誌文件
+*.log
+logs/
+
+# 運行時數據
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage 目錄
+coverage/
+.nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+
+# 可選的 npm 緩存目錄
+.npm
+
+# 可選的 eslint 緩存
+.eslintcache
+
+# Parcel 緩存
+.cache
+.parcel-cache
+
+# Next.js 構建輸出
+.next
+out
+
+# Nuxt.js 構建 / 生成輸出
+.nuxt
+
+# Gatsby 文件
+.cache/
+public/
+
+# Vite
+*.local
+
+# Rollup
+.rollup.cache
+
+# Temporary folders
+tmp/
+temp/
+
+# 備份文件
+*.bak
+*.backup
+
+# 本地腳本和敏感文件
+*.sql
+*.bat
+CONNECTION_FIX.md
+EXISTING_DATABASE_FIX.md
+FIX_GENERATOR_ACCESS.sql
+MANUAL_STORAGE_SETUP.md
+QUICK_FIX.md
+SAVE_ISSUE_FIX.sql
+STORAGE_FIX.sql
+STORAGE_SETUP.sql
+TROUBLESHOOT_REPORT.md
+
+# 調試和測試腳本
+admin/FINAL_CHECK.md
+admin/QUICK_FIX.md
+admin/QUICK_TEST_GUIDE.md
+admin/check-posts.js
+admin/comprehensive-test.js
+admin/create-demo-post.js
+admin/debug-image-upload.js
+admin/fix-article-status.js
+admin/fixed-image-test.js
+admin/generate-with-auth.js
+admin/publish-post.js
+admin/quick-publish.js
+admin/simple-image-test.js
+admin/test-credentials.md
+admin/test-direct-query.js
+admin/scripts/debug-save.js
+admin/scripts/setup-check.js
+admin/scripts/case-check.js
+admin/scripts/fix-connection.js

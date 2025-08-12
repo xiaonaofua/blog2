@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>我的個人博客</title>
+    <link>https://xiaonaofua.github.io/blog2</link>
+    <description>分享我的思考和經驗</description>
+    <language>zh-TW</language>
+    <lastBuildDate>Tue, 12 Aug 2025 12:34:03 GMT</lastBuildDate>
+    
+      <item>
+        <title><![CDATA[test]]></title>
+        <link>https://xiaonaofua.github.io/blog2/posts/test.html</link>
+        <description><![CDATA[test999]]></description>
+        <pubDate>Thu, 01 Jan 1970 00:00:00 GMT</pubDate>
+        <guid>https://xiaonaofua.github.io/blog2/posts/test.html</guid>
+      </item>
+    
+  </channel>
+</rss>

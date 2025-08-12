@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  body {
+    @apply bg-white text-gray-900 font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500 disabled:pointer-events-none disabled:opacity-50;
+  }
+  
+  .btn-primary {
+    @apply btn bg-primary-600 text-white shadow hover:bg-primary-700;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-gray-100 text-gray-900 shadow-sm hover:bg-gray-200;
+  }
+  
+  .btn-warning {
+    @apply btn bg-yellow-500 text-white shadow-sm hover:bg-yellow-600;
+  }
+  
+  .btn-ghost {
+    @apply btn hover:bg-gray-100;
+  }
+  
+  .input {
+    @apply flex h-9 w-full rounded-md border border-gray-200 bg-white px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  .textarea {
+    @apply flex min-h-[60px] w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm shadow-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-500 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  .card {
+    @apply rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm;
+  }
+  
+  .card-header {
+    @apply flex flex-col space-y-1.5 p-6;
+  }
+  
+  .card-content {
+    @apply p-6 pt-0;
+  }
+}
+
+/* TipTap 編輯器樣式 */
+.ProseMirror {
+  @apply prose prose-gray max-w-none focus:outline-none;
+  min-height: 400px;
+}
+
+.ProseMirror h1 {
+  @apply text-3xl font-bold mt-8 mb-4;
+}
+
+.ProseMirror h2 {
+  @apply text-2xl font-bold mt-6 mb-3;
+}
+
+.ProseMirror h3 {
+  @apply text-xl font-bold mt-4 mb-2;
+}
+
+.ProseMirror p {
+  @apply mb-4 leading-7;
+}
+
+.ProseMirror blockquote {
+  @apply border-l-4 border-gray-300 pl-4 italic;
+}
+
+.ProseMirror code {
+  @apply bg-gray-100 px-2 py-1 rounded text-sm;
+}
+
+.ProseMirror pre {
+  @apply bg-gray-100 p-4 rounded-lg overflow-x-auto;
+}
+
+.ProseMirror pre code {
+  @apply bg-transparent p-0;
+}
+
+.ProseMirror img {
+  @apply max-w-full h-auto rounded-lg shadow-md;
+}
+
+.ProseMirror ul, .ProseMirror ol {
+  @apply mb-4 pl-6;
+}
+
+.ProseMirror li {
+  @apply mb-2;
+}
+
+.ProseMirror a {
+  @apply text-primary-600 hover:text-primary-700 underline;
+}
+
+/* 編輯器工具欄樣式 */
+.editor-toolbar {
+  @apply flex items-center gap-1 p-2 border-b border-gray-200 bg-gray-50;
+}
+
+.editor-button {
+  @apply p-2 rounded hover:bg-gray-200 transition-colors;
+}
+
+.editor-button.is-active {
+  @apply bg-primary-100 text-primary-700;
+}
+
+/* 加載動畫 */
+.spinner {
+  @apply inline-block w-4 h-4 border-2 border-gray-300 border-t-primary-600 rounded-full animate-spin;
+}

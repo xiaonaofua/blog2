@@ -1,0 +1,37 @@
+{
+  "name": "personal-blog-system",
+  "version": "1.0.0",
+  "description": "個人博客系統 - JAMstack 架構，Supabase 後端，GitHub Pages 靜態托管",
+  "private": true,
+  "scripts": {
+    "dev:admin": "cd admin && npm run dev",
+    "build:admin": "cd admin && npm run build",
+    "generate:static": "cd admin && npm run generate-static",
+    "setup": "npm run setup:admin",
+    "setup:admin": "cd admin && npm install",
+    "lint": "cd admin && npm run lint",
+    "preview": "cd admin && npm run preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiaonaofua/blog2.git"
+  },
+  "keywords": [
+    "blog",
+    "jamstack",
+    "supabase",
+    "github-pages",
+    "react",
+    "typescript",
+    "static-site-generator"
+  ],
+  "author": "xiaonaofua",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "workspaces": [
+    "admin"
+  ]
+}

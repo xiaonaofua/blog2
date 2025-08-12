@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://xiaonaofua.github.io/blog2/sitemap.xml
+
+# 允許搜索引擎索引所有內容
+Crawl-delay: 1
+
+# 禁止訪問管理相關路徑（如果有）
+Disallow: /admin/
+Disallow: /.git/
+Disallow: /node_modules/
+
+# 允許訪問 CSS、JS 和圖片
+Allow: /assets/

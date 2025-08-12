@@ -1,0 +1,63 @@
+name: 部署管理面板
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'admin/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'admin/package-lock.json'
+
+      - name: Install dependencies
+        run: |
+          cd admin
+          npm ci
+
+      - name: Build admin panel
+        run: |
+          cd admin
+          npm run build
+        env:
+          VITE_SUPABASE_URL: https://bvdgbnlzfyygosgqtknak.supabase.co
+          VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2ZGdibmx6Znl5Z29zcXRrbmF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0NzM3OTQsImV4cCI6MjA3MDA0OTc5NH0.OYPJoXN9LNQuIfyWyDXs0V2BvdbS7Rkw-mXcVskrv4g
+
+      # 部署到 Vercel（推薦）
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID }}
+          vercel-project-id: ${{ secrets.PROJECT_ID }}
+          working-directory: ./admin
+          vercel-args: '--prod'
+        if: github.ref == 'refs/heads/main'
+
+      # 或者部署到 Netlify
+      # - name: Deploy to Netlify
+      #   uses: nwtgck/actions-netlify@v2.1
+      #   with:
+      #     publish-dir: './admin/dist'
+      #     production-branch: main
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     deploy-message: "Deploy from GitHub Actions"
+      #   env:
+      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Deployment notification
+        run: |
+          echo "🚀 管理面板已部署完成！"
+          echo "📝 您現在可以通過管理面板創建和管理博客內容"

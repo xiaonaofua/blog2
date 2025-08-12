@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test - 我的個人博客</title>
+    <meta name="description" content="test999">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://xiaonaofua.github.io/blog2/posts/{{slug}}.html">
+    <meta property="og:title" content="test">
+    <meta property="og:description" content="test999">
+    <meta property="og:image" content="{{featured-image}}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xiaonaofua.github.io/blog2/posts/{{slug}}.html">
+    <meta property="twitter:title" content="test">
+    <meta property="twitter:description" content="test999">
+    <meta property="twitter:image" content="{{featured-image}}">
+
+    <!-- Article meta -->
+    <meta property="article:published_time" content="1970-01-01">
+    <meta property="article:author" content="我的個人博客">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="我的個人博客 RSS Feed" href="/feed.xml">
+</head>
+<body>
+    <header class="site-header compact">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="site-title">
+                    <a href="/">我的個人博客</a>
+                </h1>
+                <nav class="site-nav">
+                    <a href="/" class="nav-link">首頁</a>
+                    <a href="/posts/" class="nav-link">歸檔</a>
+                    <a href="/feed.xml" class="nav-link">訂閱</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="site-main">
+        <div class="container">
+            <article class="post">
+                <header class="post-header">
+                    <h1 class="post-title">test</h1>
+                    <div class="post-meta">
+                        <time class="post-date" datetime="1970-01-01">1970-01-01</time>
+                        <span class="post-reading-time">預計閱讀時間 3 分鐘</span>
+                    </div>
+                </header>
+
+                <div class="post-content prose">
+                    <p>test</p><p>999</p>
+                </div>
+
+                <footer class="post-footer">
+                    <div class="post-share">
+                        <p class="share-label">分享這篇文章</p>
+                        <div class="share-buttons">
+                            <a href="#" class="share-button" data-share="twitter" title="分享到 Twitter">🐦</a>
+                            <a href="#" class="share-button" data-share="facebook" title="分享到 Facebook">📘</a>
+                            <a href="#" class="share-button" data-share="copy" title="複製鏈接">🔗</a>
+                        </div>
+                    </div>
+                </footer>
+            </article>
+
+            <nav class="post-navigation">
+                <!-- 這裡可以添加上一篇/下一篇導航 -->
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">
+                    © 2025 我的個人博客. 用 ❤️ 製作
+                </p>
+                <div class="footer-links">
+                    <a href="/feed.xml" class="footer-link" aria-label="RSS 訂閱" title="RSS 訂閱">📡</a>
+                    <a href="https://github.com/xiaonaofua/blog2" class="footer-link" aria-label="GitHub" title="查看源碼">🔗</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/prism.js"></script>
+</body>
+</html>

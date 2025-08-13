@@ -35,8 +35,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          # 不使用緩存，避免路徑問題
-          
+
+      - name: 💾 緩存依賴
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            node_modules
+            admin/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+            
       - name: 📋 安裝根目錄依賴
         run: npm install
         

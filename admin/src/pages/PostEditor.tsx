@@ -142,7 +142,7 @@ export const PostEditor: React.FC = () => {
       setLastSaved(new Date())
       
       if (saveStatus === 'published') {
-        alert('文章發布成功！')
+        alert('文章發布成功！🎉\n\n系統將在 5 分鐘內自動檢測並部署到博客。\n您可以在「設置」頁面查看部署狀態。')
       }
     } catch (error: any) {
       console.error('Save error:', error)

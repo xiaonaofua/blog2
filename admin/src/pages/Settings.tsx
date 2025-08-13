@@ -1,33 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 
 export const Settings: React.FC = () => {
   const { user } = useAuth()
-  const [generating, setGenerating] = useState(false)
-
-  const handleGenerateStatic = async () => {
-    setGenerating(true)
-    try {
-      // 這裡會調用靜態站點生成 API
-      const response = await fetch('/api/generate-static', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (response.ok) {
-        alert('靜態站點生成成功！')
-      } else {
-        throw new Error('生成失敗')
-      }
-    } catch (error) {
-      console.error('Generate error:', error)
-      alert('生成失敗，請稍後再試')
-    } finally {
-      setGenerating(false)
-    }
-  }
 
   return (
     <div className="space-y-6">
@@ -109,35 +84,63 @@ export const Settings: React.FC = () => {
         </div>
       </div>
 
-      {/* 靜態站點生成 */}
+      {/* 自動部署狀態 */}
       <div className="card">
         <div className="card-header">
-          <h2 className="text-lg font-semibold">靜態站點生成</h2>
+          <h2 className="text-lg font-semibold">🚀 自動部署</h2>
         </div>
         <div className="card-content">
           <div className="space-y-4">
-            <p className="text-sm text-gray-600">
-              將您的博客內容生成為靜態 HTML 文件，並自動部署到 GitHub Pages。
-            </p>
+            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <div className="h-5 w-5 rounded-full bg-green-400 flex items-center justify-center">
+                    <div className="h-2 w-2 rounded-full bg-white animate-pulse"></div>
+                  </div>
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-green-800">自動部署已啟用</h3>
+                  <div className="mt-1 text-sm text-green-700">
+                    <p>
+                      您的博客已配置為自動部署模式。當您發布新文章時，系統會在 <strong>5 分鐘內</strong> 自動檢測變更並部署到 GitHub Pages。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
             
-            <div className="flex items-center gap-4">
-              <button
-                onClick={handleGenerateStatic}
-                disabled={generating}
-                className="btn btn-primary"
-              >
-                {generating ? (
-                  <>
-                    <div className="spinner mr-2"></div>
-                    生成中...
-                  </>
-                ) : (
-                  '生成靜態站點'
-                )}
-              </button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="bg-blue-50 p-3 rounded-lg">
+                <div className="font-medium text-blue-900 mb-1">📝 發布流程</div>
+                <div className="text-blue-800">
+                  寫作 → 發布文章 → 5分鐘內自動部署
+                </div>
+              </div>
               
-              <div className="text-sm text-gray-500">
-                最後生成：還未生成過
+              <div className="bg-purple-50 p-3 rounded-lg">
+                <div className="font-medium text-purple-900 mb-1">⚡ 部署頻率</div>
+                <div className="text-purple-800">
+                  每 5 分鐘檢查一次新內容
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-700">部署狀態</p>
+                  <p className="text-xs text-gray-500">
+                    可以在 GitHub Actions 頁面查看詳細日誌
+                  </p>
+                </div>
+                <a 
+                  href="https://github.com/xiaonaofua/blog2/actions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-secondary btn-sm"
+                >
+                  查看部署日誌 ↗
+                </a>
               </div>
             </div>
           </div>

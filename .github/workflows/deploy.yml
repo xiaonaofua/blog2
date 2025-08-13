@@ -1,9 +1,18 @@
-name: 部署博客到 GitHub Pages
+name: 自動部署博客到 GitHub Pages
 
 on:
+  schedule:
+    # 每 5 分鐘檢查一次新文章
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+    # 保留手動觸發選項，用於緊急部署
   push:
     branches: [ main ]
-  workflow_dispatch:
+    paths:
+      # 只有這些文件變更時才觸發，避免不必要的部署
+      - '.github/workflows/**'
+      - 'templates/**'
+      - 'scripts/**'
 
 permissions:
   contents: read
@@ -36,11 +45,55 @@ jobs:
           cd admin
           npm install
 
+      - name: 🔍 檢查是否有新發布的文章
+        id: check-posts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://bvdgbnlzfyygosqtknaw.supabase.co' }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2ZGdibmx6Znl5Z29zcXRrbmF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ0NzM3OTQsImV4cCI6MjA3MDA0OTc5NH0.OYPJoXN9LNQuIfyWyDXs0V2BvdbS7Rkw-mXcVskrv4g' }}
+        run: |
+          # 檢查是否有新的或更新的已發布文章（最近8分鐘內）
+          echo "正在檢查是否有新發布的文章..."
+          
+          # 計算8分鐘前的時間戳
+          EIGHT_MINUTES_AGO=$(date -u -d '8 minutes ago' '+%Y-%m-%dT%H:%M:%S.%3NZ' 2>/dev/null || date -u -v-8M '+%Y-%m-%dT%H:%M:%S.000Z')
+          echo "檢查時間點: $EIGHT_MINUTES_AGO"
+          
+          # 查詢 Supabase 是否有最近發布或更新的文章
+          RESPONSE=$(curl -s -X GET \
+            "${SUPABASE_URL}/rest/v1/posts?status=eq.published&or=(published_at.gte.${EIGHT_MINUTES_AGO},updated_at.gte.${EIGHT_MINUTES_AGO})" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
+            
+          # 檢查響應
+          if echo "$RESPONSE" | grep -q '"id"'; then
+            ARTICLE_COUNT=$(echo "$RESPONSE" | grep -o '"id"' | wc -l)
+            echo "found-changes=true" >> $GITHUB_OUTPUT
+            echo "✅ 發現 $ARTICLE_COUNT 篇新發布或更新的文章"
+            echo "文章詳情: $RESPONSE"
+          else
+            echo "found-changes=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ 沒有發現新發布或更新的文章"
+          fi
+          
+          # 如果是首次運行或 docs 目錄不存在，強制生成
+          if [ ! -d "docs" ] || [ ! -f "docs/index.html" ]; then
+            echo "found-changes=true" >> $GITHUB_OUTPUT
+            echo "📁 docs 目錄不完整，需要初始生成"
+          fi
+
       - name: 🚀 生成靜態博客
+        if: steps.check-posts.outputs.found-changes == 'true' || github.event_name == 'workflow_dispatch'
         run: npm run generate:static
         continue-on-error: true
 
+      - name: 📝 更新部署時間戳
+        if: steps.check-posts.outputs.found-changes == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          mkdir -p docs
+          touch docs/.last-deploy
+          
       - name: 🔍 檢查生成的文件
+        if: steps.check-posts.outputs.found-changes == 'true' || github.event_name == 'workflow_dispatch'
         run: |
           echo "檢查 docs 目錄內容:"
           ls -la docs/
@@ -53,14 +106,17 @@ jobs:
           fi
 
       - name: 📄 配置 GitHub Pages
+        if: steps.check-posts.outputs.found-changes == 'true' || github.event_name == 'workflow_dispatch'
         uses: actions/configure-pages@v4
 
       - name: 📤 上傳頁面文件
+        if: steps.check-posts.outputs.found-changes == 'true' || github.event_name == 'workflow_dispatch'
         uses: actions/upload-pages-artifact@v3
         with:
           path: './docs'
 
       - name: 🚀 部署到 GitHub Pages
+        if: steps.check-posts.outputs.found-changes == 'true' || github.event_name == 'workflow_dispatch'
         id: deployment
         uses: actions/deploy-pages@v4
         with:
@@ -68,6 +124,12 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🎉 部署完成通知
+        if: steps.check-posts.outputs.found-changes == 'true' || github.event_name == 'workflow_dispatch'
         run: |
           echo "✅ 博客部署成功！"
           echo "🌐 訪問地址: https://xiaonaofua.github.io/blog2"
+          
+      - name: ℹ️ 無變更通知
+        if: steps.check-posts.outputs.found-changes == 'false' && github.event_name == 'schedule'
+        run: |
+          echo "ℹ️ 沒有發現新的文章變更，跳過部署"
